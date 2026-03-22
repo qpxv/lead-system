@@ -20,12 +20,15 @@ export default function Nav() {
   return (
     <div className="navbar glass-nav sticky top-0 z-50 min-h-12 px-4">
       {/* Brand */}
-      <div className="navbar-start gap-3">
+      <div className="navbar-start">
         <div className="flex items-center gap-2">
           <span className="w-2 h-2 rounded-full bg-primary shadow-[0_0_8px_var(--color-primary)]" />
           <span className="font-semibold text-sm tracking-tight">Outreach</span>
         </div>
+      </div>
 
+      {/* Nav links */}
+      <div className="navbar-center">
         <div className="flex gap-0.5">
           <Link
             href="/"
