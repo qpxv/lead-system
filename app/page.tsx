@@ -17,7 +17,7 @@ export default async function PipelinePage() {
     const day = getDayNumber(lead.createdAt);
     if (day >= 1 && day <= 5) {
       if (day === 5 && lead.hasReplied) continue; // Day 5: non-replied only
-      groups[day].push(lead);
+      groups[day].push(lead)
     }
   }
 
