@@ -2,6 +2,9 @@
 
 import { useState, useTransition, useRef } from "react";
 import { updateNotes, deleteLead, moveToPipeline } from "@/app/actions";
+import { Button } from "./ui/button";
+import { Textarea } from "./ui/textarea";
+import { Spinner } from "./ui/spinner";
 
 interface Conversation {
   id: string;
@@ -54,75 +57,69 @@ export default function ConversationItem({ conversation }: { conversation: Conve
   });
 
   return (
-    <li className="card bg-base-200 shadow-sm border border-base-300/60">
-      <div className="card-body p-4 gap-3">
-        {/* Header row */}
+    <li className="bg-card border border-border rounded-lg animate-fade-up">
+      <div className="p-4 flex flex-col gap-3">
+
+        {/* Header */}
         <div className="flex items-start justify-between gap-3">
-          <div className="flex flex-col gap-0.5 flex-1 min-w-0">
-            <span className="font-semibold tracking-tight">{conversation.name}</span>
-            <a
-              href={conversation.profileUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="link link-primary text-xs no-underline hover:underline"
-            >
-              View Profile ↗
-            </a>
-            <span className="text-xs text-base-content/40 mt-0.5">Added {dateStr}</span>
+          <div className="flex flex-col gap-0.5 min-w-0 flex-1">
+            <span className="text-sm font-semibold tracking-tight text-foreground">{conversation.name}</span>
+            <div className="flex items-center gap-2">
+              <a
+                href={conversation.profileUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-[11px] text-muted-foreground hover:text-primary transition-colors"
+              >
+                ↗ profile
+              </a>
+              <span className="text-muted-foreground/40">·</span>
+              <span className="text-[11px] text-muted-foreground font-mono">{dateStr}</span>
+            </div>
           </div>
 
-          <div className="flex items-center gap-1 flex-shrink-0">
+          <div className="flex items-center gap-0.5 flex-shrink-0">
             {!editing && (
-              <button onClick={handleEditStart} className="btn btn-ghost btn-xs">
-                {notes ? "Edit Notes" : "+ Notes"}
-              </button>
+              <Button variant="ghost" size="sm" onClick={handleEditStart}>
+                {notes ? "Edit notes" : "+ Note"}
+              </Button>
             )}
-            <button
-              onClick={handleMoveToPipeline}
-              disabled={pending}
-              className="btn btn-ghost btn-xs"
-              title="Move back to pipeline"
-            >
+            <Button variant="ghost" size="sm" onClick={handleMoveToPipeline} disabled={pending} title="Move back to pipeline">
               ↩
-            </button>
-            <button
-              onClick={handleDelete}
-              disabled={pending}
-              className="btn btn-ghost btn-xs text-error hover:bg-error/10"
-              title="Delete"
-            >
+            </Button>
+            <Button variant="destructive" size="sm" onClick={handleDelete} disabled={pending} title="Delete">
               ✕
-            </button>
+            </Button>
           </div>
         </div>
 
         {/* Notes */}
         {editing ? (
           <div className="flex flex-col gap-2">
-            <textarea
+            <Textarea
               ref={textareaRef}
               value={draft}
               onChange={(e) => setDraft(e.target.value)}
-              className="textarea textarea-bordered textarea-sm w-full bg-base-100 resize-y min-h-16"
-              placeholder="Add conversation notes…"
+              placeholder="Add notes…"
               rows={3}
             />
             <div className="flex gap-1.5 justify-end">
-              <button onClick={handleSave} disabled={pending} className="btn btn-primary btn-xs">
-                {pending ? <span className="loading loading-spinner loading-xs" /> : "Save"}
-              </button>
-              <button onClick={handleCancel} className="btn btn-ghost btn-xs">Cancel</button>
+              <Button size="sm" onClick={handleSave} disabled={pending}>
+                {pending ? <Spinner /> : "Save"}
+              </Button>
+              <Button size="sm" variant="ghost" onClick={handleCancel}>Cancel</Button>
             </div>
           </div>
         ) : notes ? (
           <p
-            className="text-sm text-base-content/70 leading-relaxed whitespace-pre-wrap cursor-pointer rounded-lg bg-base-100 px-3 py-2 border border-base-300/60 hover:border-base-300"
+            className="text-xs text-muted-foreground leading-relaxed whitespace-pre-wrap cursor-pointer rounded-md bg-muted px-3 py-2.5 border border-border hover:border-ring/40 transition-colors"
             onClick={handleEditStart}
             title="Click to edit"
           >
             {notes}
           </p>
         ) : null}
+
       </div>
     </li>
   );

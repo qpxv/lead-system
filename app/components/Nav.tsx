@@ -5,6 +5,7 @@ import { usePathname } from "next/navigation";
 import { runDailyAutomation } from "@/app/actions";
 import { useTransition } from "react";
 import ThemeToggle from "./ThemeToggle";
+import { Spinner } from "./ui/spinner";
 
 export default function Nav() {
   const pathname = usePathname();
@@ -18,47 +19,59 @@ export default function Nav() {
   }
 
   return (
-    <div className="navbar glass-nav sticky top-0 z-50 min-h-12 px-4">
-      {/* Brand */}
-      <div className="navbar-start">
-        <div className="flex items-center gap-2">
-          <span className="w-2 h-2 rounded-full bg-primary shadow-[0_0_8px_var(--color-primary)]" />
-          <span className="font-semibold text-sm tracking-tight">Outreach</span>
-        </div>
-      </div>
+    <header className="sticky top-0 z-50 border-b border-border bg-background/75 backdrop-blur-md">
+      <div className="max-w-[740px] mx-auto px-4 h-12 flex items-center justify-between gap-4">
 
-      {/* Nav links */}
-      <div className="navbar-center">
-        <div className="flex gap-0.5">
+        {/* Brand */}
+        <div className="flex items-center gap-2 flex-shrink-0">
+          <span className="w-[7px] h-[7px] rounded-full bg-primary" />
+          <span className="text-sm font-semibold tracking-tight text-foreground">Outreach</span>
+        </div>
+
+        {/* Segmented nav */}
+        <nav
+          className="flex gap-px bg-muted rounded-lg p-0.5"
+          aria-label="Main navigation"
+        >
           <Link
             href="/"
-            className={`btn btn-ghost btn-xs ${pathname === "/" ? "btn-active" : ""}`}
+            className={[
+              "px-3 py-1 rounded-md text-xs font-medium transition-colors no-underline",
+              pathname === "/"
+                ? "bg-background text-foreground shadow-sm"
+                : "text-muted-foreground hover:text-foreground",
+            ].join(" ")}
           >
             Pipeline
           </Link>
           <Link
             href="/conversations"
-            className={`btn btn-ghost btn-xs ${pathname === "/conversations" ? "btn-active" : ""}`}
+            className={[
+              "px-3 py-1 rounded-md text-xs font-medium transition-colors no-underline",
+              pathname === "/conversations"
+                ? "bg-background text-foreground shadow-sm"
+                : "text-muted-foreground hover:text-foreground",
+            ].join(" ")}
           >
             Conversations
           </Link>
+        </nav>
+
+        {/* Controls */}
+        <div className="flex items-center gap-1 flex-shrink-0">
+          <button
+            onClick={handleRunAutomation}
+            disabled={pending}
+            title="Run daily automation"
+            className="hidden sm:flex items-center gap-1.5 h-7 px-2.5 rounded-md text-xs font-medium text-muted-foreground hover:text-foreground hover:bg-accent transition-colors disabled:opacity-40"
+          >
+            {pending ? <Spinner /> : <span className="text-[11px]">⚡</span>}
+            {pending ? "Running…" : "Run Daily"}
+          </button>
+          <ThemeToggle />
         </div>
-      </div>
 
-      {/* Right side */}
-      <div className="navbar-end gap-1.5">
-        <button
-          onClick={handleRunAutomation}
-          disabled={pending}
-          className="btn btn-ghost btn-xs hidden sm:flex"
-          title="Run daily automation (Day 6 leads)"
-        >
-          {pending ? <span className="loading loading-spinner loading-xs" /> : "⚡"}
-          {pending ? "Running…" : "Run Daily"}
-        </button>
-
-        <ThemeToggle />
       </div>
-    </div>
+    </header>
   );
 }

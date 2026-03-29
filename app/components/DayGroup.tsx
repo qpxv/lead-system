@@ -13,42 +13,60 @@ interface Lead {
 
 export default function DayGroup({ day, leads }: { day: number; leads: Lead[] }) {
   const [open, setOpen] = useState(true);
-
   const label = DAY_LABELS[day] ?? `Day ${day}`;
 
   function handleOpenAll() {
     leads.forEach((lead, i) => {
-      setTimeout(() => {
-        window.open(lead.profileUrl, "_blank", "noopener,noreferrer");
-      }, i * 120);
+      setTimeout(() => window.open(lead.profileUrl, "_blank", "noopener,noreferrer"), i * 120);
     });
   }
 
   return (
     <div
-      className="card bg-base-200 shadow-sm overflow-hidden day-card"
-      style={{ "--dc": `var(--day${day})`, "--da": `var(--day${day}-a)` } as React.CSSProperties}
+      className="day-card animate-fade-up"
+      style={
+        {
+          "--dc": `var(--day${day})`,
+          "--da": `var(--day${day}-a)`,
+          animationDelay: `${(day - 1) * 50}ms`,
+        } as React.CSSProperties
+      }
     >
       {/* Header */}
-      <div
-        className="flex items-center justify-between px-3 py-2.5 cursor-pointer select-none day-head-bg min-h-[44px]"
-        onClick={() => setOpen((o) => !o)}
-      >
-        <div className="flex items-center gap-2">
-          <span className="text-xs text-base-content/40 w-3">{open ? "▾" : "▸"}</span>
+      <div className="day-head" onClick={() => setOpen((o) => !o)}>
+        {/* Watermark */}
+        <span className="day-watermark">{day}</span>
+
+        {/* Left — chevron + badge + label + count */}
+        <div className="relative flex items-center gap-2">
+          <svg
+            width="12" height="12"
+            viewBox="0 0 12 12"
+            fill="none"
+            className="text-muted-foreground transition-transform duration-150 flex-shrink-0"
+            style={{ transform: open ? "rotate(0deg)" : "rotate(-90deg)" }}
+          >
+            <path d="M2 4l4 4 4-4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+          </svg>
+
+          {/* Day badge */}
           <span
-            className="w-[22px] h-[22px] rounded-[6px] flex items-center justify-center text-[11px] font-bold text-white flex-shrink-0"
+            className="w-5 h-5 rounded flex items-center justify-center text-[10px] font-extrabold text-white flex-shrink-0 font-mono"
             style={{ background: `var(--day${day})` }}
           >
             {day}
           </span>
-          <span className="text-sm font-semibold tracking-tight">{label}</span>
-          <span className="badge badge-neutral badge-sm font-semibold tabular-nums">
+
+          <span className="text-[13px] font-semibold tracking-tight text-foreground">{label}</span>
+
+          {/* Count badge */}
+          <span className="text-[11px] font-semibold tabular-nums font-mono text-muted-foreground bg-muted px-1.5 py-px rounded-full">
             {leads.length}
           </span>
         </div>
 
-        <div className="flex items-center gap-2" onClick={(e) => e.stopPropagation()}>
+        {/* Right — open all */}
+        <div className="relative flex items-center gap-2" onClick={(e) => e.stopPropagation()}>
           {leads.length > 0 && (
             <button onClick={handleOpenAll} className="open-all-btn">
               Open All ↗
@@ -59,9 +77,11 @@ export default function DayGroup({ day, leads }: { day: number; leads: Lead[] })
 
       {/* Lead list */}
       {open && (
-        <ul className="px-2 pb-2 pt-1 flex flex-col gap-0.5">
+        <ul className="px-2 pb-2 pt-1 flex flex-col gap-px">
           {leads.length === 0 ? (
-            <li className="text-center text-sm text-base-content/40 py-4">No leads today</li>
+            <li className="text-center text-xs text-muted-foreground py-5 font-mono">
+              — no leads —
+            </li>
           ) : (
             leads.map((lead) => <LeadItem key={lead.id} lead={lead} />)
           )}
