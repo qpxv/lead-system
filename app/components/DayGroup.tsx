@@ -12,7 +12,7 @@ interface Lead {
 }
 
 export default function DayGroup({ day, leads }: { day: number; leads: Lead[] }) {
-  const [open, setOpen] = useState(true);
+  const [open, setOpen] = useState(leads.length > 0);
   const label = DAY_LABELS[day] ?? `Day ${day}`;
 
   function handleOpenAll() {
