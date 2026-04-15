@@ -2,10 +2,10 @@
 
 import { useOptimistic, useTransition, useState, useRef } from "react";
 import { toggleReplied, deleteLead, updateLead } from "@/app/actions";
-import { Button } from "./ui/button";
-import { Input } from "./ui/input";
-import { Checkbox } from "./ui/checkbox";
-import { Spinner } from "./ui/spinner";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Checkbox } from "@/components/ui/checkbox";
+import { Spinner } from "@/components/ui/spinner";
 
 interface Lead {
   id: string;
@@ -65,7 +65,7 @@ export default function LeadItem({ lead }: { lead: Lead }) {
           <Button size="sm" onClick={handleEditSave} disabled={pending}>
             {pending ? <Spinner /> : "Save"}
           </Button>
-          <Button size="sm" variant="ghost" onClick={handleEditCancel}>Cancel</Button>
+          <Button size="sm" variant="outline" onClick={handleEditCancel}>Cancel</Button>
         </div>
       </li>
     );
@@ -99,7 +99,7 @@ export default function LeadItem({ lead }: { lead: Lead }) {
 
       {/* Actions — fade in on hover via .lead-actions CSS class */}
       <div className="lead-actions flex items-center gap-0.5 flex-shrink-0">
-        <Button variant="ghost" size="sm" onClick={handleEditStart}>Edit</Button>
+        <Button variant="outline" size="sm" onClick={handleEditStart}>Edit</Button>
         <Button variant="destructive" size="sm" onClick={handleDelete} disabled={pending}>✕</Button>
       </div>
     </li>

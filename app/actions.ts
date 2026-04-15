@@ -67,6 +67,40 @@ export async function deleteLead(id: string) {
   revalidatePath("/conversations");
 }
 
+// ─── Rewind Leads ─────────────────────────────────────────────────────────────
+// Adds `days` calendar days to createdAt for every active lead,
+// making getDayNumber() return a smaller value (earlier in the pipeline).
+
+export async function rewindLeads(days: number): Promise<{ rewound: number }> {
+  if (!Number.isInteger(days) || days < 1 || days > 7) return { rewound: 0 };
+
+  const result = await prisma.$executeRaw`
+    UPDATE "Lead"
+    SET "createdAt" = "createdAt" + (${days} * INTERVAL '1 day')
+    WHERE status = 'active'
+  `;
+
+  revalidatePath("/");
+  return { rewound: result };
+}
+
+// ─── Forward Leads ────────────────────────────────────────────────────────────
+// Subtracts `days` calendar days from createdAt for every active lead,
+// making getDayNumber() return a larger value (further in the pipeline).
+
+export async function forwardLeads(days: number): Promise<{ forwarded: number }> {
+  if (!Number.isInteger(days) || days < 1 || days > 7) return { forwarded: 0 };
+
+  const result = await prisma.$executeRaw`
+    UPDATE "Lead"
+    SET "createdAt" = "createdAt" - (${days} * INTERVAL '1 day')
+    WHERE status = 'active'
+  `;
+
+  revalidatePath("/");
+  return { forwarded: result };
+}
+
 // ─── Daily Automation ─────────────────────────────────────────────────────────
 // Since replied leads already auto-move to conversations on checkbox,
 // this only handles un-replied Day 6+ leads (delete them).

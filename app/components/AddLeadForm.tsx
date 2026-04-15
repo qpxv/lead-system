@@ -2,9 +2,9 @@
 
 import { useRef, useTransition } from "react";
 import { createLead } from "@/app/actions";
-import { Button } from "./ui/button";
-import { Input } from "./ui/input";
-import { Spinner } from "./ui/spinner";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Spinner } from "@/components/ui/spinner";
 
 export default function AddLeadForm() {
   const formRef = useRef<HTMLFormElement>(null);

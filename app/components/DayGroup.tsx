@@ -1,7 +1,9 @@
 "use client";
 
 import { useState } from "react";
+import { ChevronDown } from "lucide-react";
 import LeadItem from "./LeadItem";
+import { Button } from "@/components/ui/button";
 import { DAY_LABELS } from "@/lib/dayUtils";
 
 interface Lead {
@@ -39,15 +41,11 @@ export default function DayGroup({ day, leads }: { day: number; leads: Lead[] })
 
         {/* Left — chevron + badge + label + count */}
         <div className="relative flex items-center gap-2">
-          <svg
-            width="12" height="12"
-            viewBox="0 0 12 12"
-            fill="none"
+          <ChevronDown
+            size={12}
             className="text-muted-foreground transition-transform duration-150 flex-shrink-0"
             style={{ transform: open ? "rotate(0deg)" : "rotate(-90deg)" }}
-          >
-            <path d="M2 4l4 4 4-4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-          </svg>
+          />
 
           {/* Day badge */}
           <span
@@ -68,9 +66,9 @@ export default function DayGroup({ day, leads }: { day: number; leads: Lead[] })
         {/* Right — open all */}
         <div className="relative flex items-center gap-2" onClick={(e) => e.stopPropagation()}>
           {leads.length > 0 && (
-            <button onClick={handleOpenAll} className="open-all-btn">
+            <Button variant="outline" size="sm" onClick={handleOpenAll}>
               Open All ↗
-            </button>
+            </Button>
           )}
         </div>
       </div>

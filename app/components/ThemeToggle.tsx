@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { cn } from "@/lib/utils";
+import { Button } from "@/components/ui/button";
 
 type Pref = "system" | "light" | "dark";
 
@@ -72,17 +72,14 @@ export default function ThemeToggle() {
   const labels: Record<Pref, string> = { system: "Auto", light: "Light", dark: "Dark" };
 
   return (
-    <button
+    <Button
+      variant="outline"
+      size="icon"
       onClick={cycle}
       title={`Theme: ${labels[pref ?? "system"]} — click to cycle`}
       aria-label={`Theme: ${labels[pref ?? "system"]}`}
-      className={cn(
-        "h-7 w-7 flex items-center justify-center rounded-md",
-        "text-muted-foreground hover:text-foreground hover:bg-accent",
-        "transition-colors"
-      )}
     >
       {mounted ? icons[pref] : icons.system}
-    </button>
+    </Button>
   );
 }

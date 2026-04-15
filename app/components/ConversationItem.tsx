@@ -2,9 +2,9 @@
 
 import { useState, useTransition, useRef } from "react";
 import { updateNotes, deleteLead, moveToPipeline } from "@/app/actions";
-import { Button } from "./ui/button";
-import { Textarea } from "./ui/textarea";
-import { Spinner } from "./ui/spinner";
+import { Button } from "@/components/ui/button";
+import { Textarea } from "@/components/ui/textarea";
+import { Spinner } from "@/components/ui/spinner";
 
 interface Conversation {
   id: string;
@@ -80,11 +80,11 @@ export default function ConversationItem({ conversation }: { conversation: Conve
 
           <div className="flex items-center gap-0.5 flex-shrink-0">
             {!editing && (
-              <Button variant="ghost" size="sm" onClick={handleEditStart}>
+              <Button variant="outline" size="sm" onClick={handleEditStart}>
                 {notes ? "Edit notes" : "+ Note"}
               </Button>
             )}
-            <Button variant="ghost" size="sm" onClick={handleMoveToPipeline} disabled={pending} title="Move back to pipeline">
+            <Button variant="outline" size="sm" onClick={handleMoveToPipeline} disabled={pending} title="Move back to pipeline">
               ↩
             </Button>
             <Button variant="destructive" size="sm" onClick={handleDelete} disabled={pending} title="Delete">
@@ -107,7 +107,7 @@ export default function ConversationItem({ conversation }: { conversation: Conve
               <Button size="sm" onClick={handleSave} disabled={pending}>
                 {pending ? <Spinner /> : "Save"}
               </Button>
-              <Button size="sm" variant="ghost" onClick={handleCancel}>Cancel</Button>
+              <Button size="sm" variant="outline" onClick={handleCancel}>Cancel</Button>
             </div>
           </div>
         ) : notes ? (
