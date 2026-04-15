@@ -4,7 +4,6 @@ import { useState, useTransition } from "react";
 import { rewindLeads } from "@/app/actions";
 import { Button } from "@/components/ui/button";
 import { Spinner } from "@/components/ui/spinner";
-import { Select } from "@/components/ui/select";
 
 export default function RewindButton() {
   const [open, setOpen] = useState(false);
@@ -38,15 +37,16 @@ export default function RewindButton() {
 
             <label className="flex flex-col gap-1">
               <span className="text-[11px] text-muted-foreground">Days to rewind</span>
-              <Select
+              <select
                 value={days}
-                onChange={(e) => setDays(Number(e.target.value))}
+                onChange={(e: React.ChangeEvent<HTMLSelectElement>) => setDays(Number(e.target.value))}
                 disabled={pending}
+                className="h-8 w-full rounded-lg border border-input bg-transparent px-2.5 text-sm text-foreground outline-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 disabled:cursor-not-allowed disabled:opacity-50 dark:bg-input/30"
               >
                 {[1, 2, 3, 4, 5, 6, 7].map((d) => (
-                  <option key={d} value={d}>{d} {d === 1 ? "day" : "days"}</option>
+                  <option key={d} value={d}>{d === 1 ? "1 day" : `${d} days`}</option>
                 ))}
-              </Select>
+              </select>
             </label>
 
             <Button onClick={handleConfirm} disabled={pending} className="w-full">
