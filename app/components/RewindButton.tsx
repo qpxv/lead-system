@@ -12,9 +12,8 @@ export default function RewindButton() {
 
   function handleConfirm() {
     startTransition(async () => {
-      const result = await rewindLeads(days);
+      await rewindLeads(days);
       setOpen(false);
-      alert(`Rewound ${result.rewound} lead${result.rewound === 1 ? "" : "s"} by ${days} day${days === 1 ? "" : "s"}.`);
     });
   }
 

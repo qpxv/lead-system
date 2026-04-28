@@ -12,11 +12,8 @@ export default function ForwardButton() {
 
   function handleConfirm() {
     startTransition(async () => {
-      const result = await forwardLeads(days);
+      await forwardLeads(days);
       setOpen(false);
-      alert(
-        `Fast-forwarded ${result.forwarded} lead${result.forwarded === 1 ? "" : "s"} by ${days} day${days === 1 ? "" : "s"}.`,
-      );
     });
   }
 
