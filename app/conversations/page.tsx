@@ -12,8 +12,8 @@ export default async function ConversationsPage() {
   return (
     <main className="max-w-[740px] mx-auto w-full px-4 py-6 pb-24 flex flex-col gap-5">
       <div className="animate-fade-up">
-        <h1 className="text-base font-bold tracking-tight text-foreground">Conversations</h1>
-        <p className="text-xs text-muted-foreground mt-px tabular-nums font-mono">
+        <h1 className="text-xl font-bold tracking-tight text-foreground">Conversations</h1>
+        <p className="text-xs text-muted-foreground mt-1 tabular-nums font-mono">
           {conversations.length} {conversations.length === 1 ? "conversation" : "conversations"}
         </p>
       </div>

@@ -1,10 +1,8 @@
 "use client";
 
 import { useState, useTransition, useRef } from "react";
+import { ArrowUpRight, CornerUpLeft, X } from "lucide-react";
 import { updateNotes, deleteLead, moveToPipeline } from "@/app/actions";
-import { Button } from "@/components/ui/button";
-import { Textarea } from "@/components/ui/textarea";
-import { Spinner } from "@/components/ui/spinner";
 
 interface Conversation {
   id: string;
@@ -62,57 +60,76 @@ export default function ConversationItem({ conversation }: { conversation: Conve
 
         {/* Header */}
         <div className="flex items-start justify-between gap-3">
-          <div className="flex flex-col gap-0.5 min-w-0 flex-1">
-            <span className="text-sm font-semibold tracking-tight text-foreground">{conversation.name}</span>
+          <div className="flex flex-col gap-1 min-w-0 flex-1">
+            <span className="text-[14px] font-semibold tracking-tight text-foreground">
+              {conversation.name}
+            </span>
             <div className="flex items-center gap-2">
               <a
                 href={conversation.profileUrl}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-[11px] text-muted-foreground hover:text-primary transition-colors"
+                className="flex items-center gap-0.5 text-[10px] text-muted-foreground hover:text-foreground transition-colors rounded px-1 py-px border border-border bg-background"
               >
-                ↗ profile
+                profile
+                <ArrowUpRight size={9} />
               </a>
-              <span className="text-muted-foreground/40">·</span>
-              <span className="text-[11px] text-muted-foreground font-mono">{dateStr}</span>
+              <span className="w-px h-3 bg-border" />
+              <span className="text-[11px] text-muted-foreground font-mono tabular-nums">
+                {dateStr}
+              </span>
             </div>
           </div>
 
           <div className="flex items-center gap-0.5 flex-shrink-0">
             {!editing && (
-              <Button variant="outline" size="sm" onClick={handleEditStart}>
+              <button className="app-btn app-btn-outline" onClick={handleEditStart}>
                 {notes ? "Edit notes" : "+ Note"}
-              </Button>
+              </button>
             )}
-            <Button variant="outline" size="sm" onClick={handleMoveToPipeline} disabled={pending} title="Move back to pipeline">
-              ↩
-            </Button>
-            <Button variant="destructive" size="sm" onClick={handleDelete} disabled={pending} title="Delete">
-              ✕
-            </Button>
+            <button
+              className="app-btn app-btn-icon"
+              onClick={handleMoveToPipeline}
+              disabled={pending}
+              title="Move back to pipeline"
+            >
+              <CornerUpLeft size={12} />
+            </button>
+            <button
+              className="app-btn app-btn-icon"
+              onClick={handleDelete}
+              disabled={pending}
+              title="Delete"
+              style={{ color: "var(--danger)" }}
+            >
+              <X size={12} />
+            </button>
           </div>
         </div>
 
         {/* Notes */}
         {editing ? (
           <div className="flex flex-col gap-2">
-            <Textarea
+            <textarea
               ref={textareaRef}
+              className="app-textarea"
               value={draft}
               onChange={(e) => setDraft(e.target.value)}
               placeholder="Add notes…"
               rows={3}
             />
             <div className="flex gap-1.5 justify-end">
-              <Button size="sm" onClick={handleSave} disabled={pending}>
-                {pending ? <Spinner /> : "Save"}
-              </Button>
-              <Button size="sm" variant="outline" onClick={handleCancel}>Cancel</Button>
+              <button className="app-btn app-btn-primary" onClick={handleSave} disabled={pending}>
+                {pending ? <span className="app-spinner" /> : null}
+                Save
+              </button>
+              <button className="app-btn app-btn-outline" onClick={handleCancel}>Cancel</button>
             </div>
           </div>
         ) : notes ? (
           <p
-            className="text-xs text-muted-foreground leading-relaxed whitespace-pre-wrap cursor-pointer rounded-md bg-muted px-3 py-2.5 border border-border hover:border-ring/40 transition-colors"
+            className="text-xs text-muted-foreground leading-relaxed whitespace-pre-wrap cursor-pointer rounded-md px-3 py-2.5 border border-border hover:border-accent/30 transition-colors"
+            style={{ background: "var(--surface-hover)" }}
             onClick={handleEditStart}
             title="Click to edit"
           >

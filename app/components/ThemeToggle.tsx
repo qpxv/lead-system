@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { Button } from "@/components/ui/button";
 
 type Pref = "system" | "light" | "dark";
 
@@ -72,14 +71,13 @@ export default function ThemeToggle() {
   const labels: Record<Pref, string> = { system: "Auto", light: "Light", dark: "Dark" };
 
   return (
-    <Button
-      variant="outline"
-      size="icon"
+    <button
+      className="app-btn app-btn-icon"
       onClick={cycle}
       title={`Theme: ${labels[pref ?? "system"]} — click to cycle`}
       aria-label={`Theme: ${labels[pref ?? "system"]}`}
     >
       {mounted ? icons[pref] : icons.system}
-    </Button>
+    </button>
   );
 }
