@@ -2,12 +2,12 @@ import { NextRequest } from "next/server";
 import { prisma } from "@/lib/prisma";
 
 function extractUrl(raw: string): string | null {
-  // Pull the first http(s) URL out of whatever string we receive —
-  // guards against Shortcuts passing full page content instead of just the URL.
-  const match = raw.match(/(https?:\/\/[^\s\n\r]+)/);
+  // Match the first URL and stop before any subsequent URL —
+  // Shortcuts sometimes concatenates two copies with no separator.
+  const match = raw.match(/https?:\/\/(?:(?!https?:\/\/).)+/);
   if (!match) return null;
   try {
-    const url = new URL(match[1]);
+    const url = new URL(match[0]);
     url.search = "";
     url.hash = "";
     return url.toString();
