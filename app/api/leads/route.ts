@@ -1,14 +1,18 @@
 import { NextRequest } from "next/server";
 import { prisma } from "@/lib/prisma";
 
-function cleanUrl(raw: string): string {
+function extractUrl(raw: string): string | null {
+  // Pull the first http(s) URL out of whatever string we receive —
+  // guards against Shortcuts passing full page content instead of just the URL.
+  const match = raw.match(/(https?:\/\/[^\s\n\r]+)/);
+  if (!match) return null;
   try {
-    const url = new URL(raw.trim());
+    const url = new URL(match[1]);
     url.search = "";
     url.hash = "";
     return url.toString();
   } catch {
-    return raw.trim();
+    return null;
   }
 }
 
@@ -83,7 +87,11 @@ export async function POST(req: NextRequest) {
       return Response.json({ error: "url is required" }, { status: 400 });
     }
 
-    const profileUrl = cleanUrl(rawUrl);
+    const profileUrl = extractUrl(rawUrl);
+    if (!profileUrl) {
+      return Response.json({ error: "could not parse a valid URL" }, { status: 400 });
+    }
+
     const name = rawName || (await deriveNameFromUrl(profileUrl));
 
     const lead = await prisma.lead.create({
